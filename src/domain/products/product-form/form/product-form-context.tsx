@@ -1,5 +1,5 @@
 import { SalesChannel } from "@medusajs/medusa"
-import React from "react"
+import React, { useState } from "react"
 import { FormProvider, useForm, useFormContext } from "react-hook-form"
 import { FeatureFlagContext } from "../../../../context/feature-flag"
 import { trimValues } from "../../../../utils/trim-values"
@@ -60,6 +60,8 @@ const ProductFormContext = React.createContext<{
   onSubmit: (values: any) => void
   resetForm: () => void
   additionalDirtyState: Record<string, boolean>
+  metadata:{refundableDeposit:number | undefined, originalPrice: number | undefined}
+  updateMetadata: (any)=>void
 } | null>(null)
 
 export const ProductFormProvider = ({
@@ -83,6 +85,15 @@ export const ProductFormProvider = ({
   const [salesChannels, setSalesChannels] = React.useState<SalesChannel[]>(
     product.sales_channels
   )
+
+  const metadatDefaultValue:{
+    refundableDeposit:number | undefined, 
+    originalPrice: number | undefined} = { refundableDeposit: undefined, originalPrice: undefined };
+  const [metadata, setMetadata] = useState(metadatDefaultValue);
+
+  const updateMetadata = (value)=> {
+    setMetadata(()=> value);
+  } 
 
   const appendImage = (image) => {
     setHasImagesChanged(true)
@@ -153,8 +164,9 @@ export const ProductFormProvider = ({
       images,
       variants,
       options: productOptions,
+      metadata
     }
-
+    console.log(data);
     if (isFeatureEnabled("sales_channels")) {
       data.sales_channels = salesChannels
     }
@@ -185,6 +197,8 @@ export const ProductFormProvider = ({
             images: hasImagesChanged,
             salesChannels: hasSalesChannelsChanged,
           },
+          metadata,
+          updateMetadata
         }}
       >
         {children}

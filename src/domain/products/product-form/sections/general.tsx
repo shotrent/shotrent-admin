@@ -6,7 +6,7 @@ import {
   useAdminProductTypes,
   useAdminUpdateProduct,
 } from "medusa-react"
-import React from "react"
+import React, { useEffect } from "react"
 import { Controller } from "react-hook-form"
 import Checkbox from "../../../../components/atoms/checkbox"
 import TrashIcon from "../../../../components/fundamentals/icons/trash-icon"
@@ -21,6 +21,7 @@ import RadioGroup from "../../../../components/organisms/radio-group"
 import useImperativeDialog from "../../../../hooks/use-imperative-dialog"
 import useNotification from "../../../../hooks/use-notification"
 import { getErrorMessage } from "../../../../utils/error-messages"
+import { numberOrNull } from "../../../../utils/form-helpers"
 import {
   SINGLE_PRODUCT_VIEW,
   useProductForm,
@@ -34,7 +35,19 @@ const General = ({ showViewOptions = true, isEdit = false, product }) => {
     setViewType,
     viewType,
     setValue,
-  } = useProductForm()
+    metadata,
+    updateMetadata
+  } = useProductForm();
+
+  useEffect(() => {
+    if (product && product.metadata) {
+      updateMetadata({
+        refundableDeposit: product.metadata.refundableDeposit,
+        originalPrice: product.metadata.originalPrice
+      })
+    }
+  }, [product]);
+
   const { product_types } = useAdminProductTypes(undefined, { cacheTime: 0 })
   const { collections } = useAdminCollections()
 
@@ -103,7 +116,7 @@ const General = ({ showViewOptions = true, isEdit = false, product }) => {
           Give your product a short and clear description. 120-160 characters is
           the recommended length for search engines.
         </label>
-        <div className="grid grid-rows-3 grid-cols-2 gap-x-8 gap-y-4 mb-large">
+        <div className="grid grid-rows-5 grid-cols-2 gap-x-8 gap-y-4 mb-large">
           <Textarea
             name="description"
             id="description"
@@ -113,6 +126,7 @@ const General = ({ showViewOptions = true, isEdit = false, product }) => {
             rows={8}
             ref={register}
           />
+
           <Controller
             as={Select}
             control={control}
@@ -155,6 +169,26 @@ const General = ({ showViewOptions = true, isEdit = false, product }) => {
               )
             }}
             control={control}
+          />
+          <Input
+            name="originalPrice"
+            id="originalPrice"
+            label="Original price"
+            placeholder="Original price"
+            type="number"
+            ref={register({ setValueAs: Number })}
+            onChange={(event) => updateMetadata({ ...metadata, originalPrice: parseInt(event.target.value) })}
+            value={metadata.originalPrice}
+          />
+          <Input
+            name="refundableDeposit"
+            id="refundableDeposit"
+            label="Refundable deposit"
+            placeholder="Refundable deposit"
+            type="number"
+            ref={register({ setValueAs: Number })}
+            onChange={(event) => updateMetadata({ ...metadata, refundableDeposit: parseInt(event.target.value) })}
+            value={metadata.refundableDeposit}
           />
         </div>
         <div className="flex item-center gap-x-1.5 mb-xlarge">

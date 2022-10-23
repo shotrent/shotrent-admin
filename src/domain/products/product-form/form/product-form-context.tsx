@@ -60,7 +60,7 @@ const ProductFormContext = React.createContext<{
   onSubmit: (values: any) => void
   resetForm: () => void
   additionalDirtyState: Record<string, boolean>
-  metadata:{refundableDeposit:number | undefined, originalPrice: number | undefined}
+  metadata:{refundableDeposit:number | undefined, originalPrice: number | undefined, inTheBox: string | undefined}
   updateMetadata: (any)=>void
 } | null>(null)
 

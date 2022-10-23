@@ -43,7 +43,8 @@ const General = ({ showViewOptions = true, isEdit = false, product }) => {
     if (product && product.metadata) {
       updateMetadata({
         refundableDeposit: product.metadata.refundableDeposit,
-        originalPrice: product.metadata.originalPrice
+        originalPrice: product.metadata.originalPrice,
+        inTheBox: product.metadata.inTheBox
       })
     }
   }, [product]);
@@ -116,7 +117,7 @@ const General = ({ showViewOptions = true, isEdit = false, product }) => {
           Give your product a short and clear description. 120-160 characters is
           the recommended length for search engines.
         </label>
-        <div className="grid grid-rows-5 grid-cols-2 gap-x-8 gap-y-4 mb-large">
+        <div className="grid grid-rows-6 grid-cols-2 gap-x-8 gap-y-4 mb-large">
           <Textarea
             name="description"
             id="description"
@@ -189,6 +190,16 @@ const General = ({ showViewOptions = true, isEdit = false, product }) => {
             ref={register({ setValueAs: Number })}
             onChange={(event) => updateMetadata({ ...metadata, refundableDeposit: parseInt(event.target.value) })}
             value={metadata.refundableDeposit}
+          />
+
+          <Textarea
+            name="inTheBox"
+            id="inTheBox"
+            label="What&#39;s in the box?"
+            placeholder="What&#39;s in the box?"
+            ref={register({ setValueAs: String })}
+            onChange={(event) => updateMetadata({ ...metadata, inTheBox: event.target.value })}
+            value={metadata.inTheBox}
           />
         </div>
         <div className="flex item-center gap-x-1.5 mb-xlarge">

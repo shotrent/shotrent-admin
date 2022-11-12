@@ -87,21 +87,21 @@ const AccountDetails = () => {
             className="mt-base"
             label="Swap link template"
             name="swap_link_template"
-            placeholder="https://acme.inc/swap"
+            placeholder="https://shotrent.in/swap"
             ref={register}
           />
           <Input
             className="mt-base"
             label="Draft order link template"
             name="payment_link_template"
-            placeholder="https://acme.inc/swap"
+            placeholder="https://shotrent.in/swap"
             ref={register}
           />
           <Input
             className="mt-base"
             label="Invite link template"
             name="invite_link_template"
-            placeholder="https://acme.inc/invite={invite_token}"
+            placeholder="https://shotrent.in/invite={invite_token}"
             ref={register}
           />
         </BodyCard>
